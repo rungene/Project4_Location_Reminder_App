@@ -40,4 +40,12 @@
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="welcome_message_authed">Hi %1$s! Did you know that %2$s.</string>
+    <string name="login_prompt">Login to Enjoy Locations Reminder App!</string>
+    <!--Shared Preference Keys -->
+    <string name="welcome_text">Welcome to Locations Reminder App! Login to Enjoy</string>
+    <string name="welcome_text_login">Welcome,your now logged in</string>
+
 </resources>
