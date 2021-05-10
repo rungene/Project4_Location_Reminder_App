@@ -5,13 +5,9 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationActivity
-import com.udacity.project4.authentication.LoginViewModel
-import com.udacity.project4.authentication.MainFragment
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentRemindersBinding
@@ -84,8 +80,10 @@ class ReminderListFragment : BaseFragment() {
 //                Done: add the logout implementation
                 Toast.makeText(context,"Hi from Logout",Toast.LENGTH_LONG).show()
               AuthUI.getInstance().signOut(requireContext()).addOnSuccessListener {
-                  view?.findNavController()?.navigate(R.id.mainFragment)
-                  Toast.makeText(context,"Hi from success ",Toast.LENGTH_LONG).show()
+                  // Transfer the user to the AuthenticationActivity
+                  val logOutIntent = Intent(activity, AuthenticationActivity::class.java)
+                  startActivity(logOutIntent)
+                  activity?.finish()
 
               }
             }

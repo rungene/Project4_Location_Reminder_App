@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/reminderListFragment">
 
     <fragment
         android:id="@+id/reminderListFragment"
@@ -13,19 +13,19 @@
             android:id="@+id/to_save_reminder"
             app:destination="@id/saveReminderFragment" />
     </fragment>
-    <fragment
-        android:id="@+id/mainFragment"
-        android:name="com.udacity.project4.authentication.MainFragment"
-        android:label="MainFragment">
-        <action
-            android:id="@+id/action_mainFragment_to_reminderListFragment"
-            app:destination="@id/reminderListFragment" />
-    </fragment>
+
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.udacity.project4.authentication.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login"/>
+        tools:layout="@layout/fragment_login">
+    </fragment>
+
+    <activity
+        android:id="@+id/authenticationActivity"
+        android:name="com.udacity.project4.authentication.AuthenticationActivity"
+        android:label="AuthenticationActivity" />
+
 
     <activity
         android:id="@+id/mainActivity"

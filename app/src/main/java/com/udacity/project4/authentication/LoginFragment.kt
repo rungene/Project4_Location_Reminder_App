@@ -55,13 +55,13 @@ class LoginFragment : Fragment() {
 
 
 
-/*
 
         // If the user presses the back button, bring them back to the home screen
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             navController.popBackStack(R.id.loginFragment, true)
         }
-*/
+
+
 
         // Observe the authentication state so we can know if the user has logged in successfully.
 // If the user has logged in successfully, bring them back to the settings screen.
