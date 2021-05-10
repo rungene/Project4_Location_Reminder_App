@@ -33,13 +33,6 @@ class AuthenticationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
-        binding.viewModel = viewModel
-
-        observeAuthenticationState()
-
-
-
 
 //          Implement the create account and sign in using FirebaseUI, use sign in using email and sign in using Google
 
@@ -47,6 +40,11 @@ class AuthenticationActivity : AppCompatActivity() {
 
 //           a bonus is to customize the sign in flow to look nice using :
         //https://github.com/firebase/FirebaseUI-Android/blob/master/auth/README.md#custom-layout
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_authentication)
+        binding.viewModel = viewModel
+
+        observeAuthenticationState()
 
 
     }
@@ -90,6 +88,7 @@ class AuthenticationActivity : AppCompatActivity() {
                     // There is an authenticated user, go to RemindersActivity
                     val goToRemindersActivity = Intent(this, RemindersActivity::class.java)
                     startActivity(goToRemindersActivity )
+
 
                 }
                 else -> {

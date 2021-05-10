@@ -4,10 +4,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.firebase.ui.auth.AuthUI
 import com.udacity.project4.R
 import com.udacity.project4.authentication.AuthenticationActivity
+import com.udacity.project4.authentication.LoginViewModel
 import com.udacity.project4.base.BaseFragment
 import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentRemindersBinding
@@ -20,6 +24,7 @@ class ReminderListFragment : BaseFragment() {
     //use Koin to retrieve the ViewModel instance
 
     override val _viewModel: RemindersListViewModel by viewModel()
+    private val viewModel by viewModels<LoginViewModel>()
     private lateinit var binding: FragmentRemindersBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,6 +49,16 @@ class ReminderListFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
+
+        viewModel.authenticationState.observe(viewLifecycleOwner, Observer {
+            if (it != LoginViewModel.AuthenticationState.AUTHENTICATED){
+                val intent = Intent(requireActivity(), AuthenticationActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        })
+
         setupRecyclerView()
         binding.addReminderFAB.setOnClickListener {
             navigateToAddReminder()
