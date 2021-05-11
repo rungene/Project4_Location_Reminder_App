@@ -3,6 +3,7 @@ package com.udacity.project4.locationreminders.savereminder
 import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.PointOfInterest
 import com.udacity.project4.R
 import com.udacity.project4.base.BaseViewModel
@@ -21,6 +22,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
 
+    val locationIsConfirmed = MutableLiveData<Boolean>(false)
+
     /**
      * Clear the live data objects to start fresh next time the view model gets called
      */
@@ -31,6 +34,24 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         selectedPOI.value = null
         latitude.value = null
         longitude.value = null
+    }
+
+    fun confirmLocation(latLng: LatLng, pointOfInterest: PointOfInterest) {
+        locationIsConfirmed.value = false
+        reminderSelectedLocationStr.value = pointOfInterest.name
+        selectedPOI.value = pointOfInterest
+        latitude.value = latLng.latitude
+        longitude.value = latLng.longitude
+        navigationCommand.postValue(
+            NavigationCommand.Back
+        )
+    }
+
+    /**
+     * Set location as confirmed in order to navigate back to the reminder form.
+     */
+    fun setLocationAsConfirmed(value: Boolean) {
+        locationIsConfirmed.value = value
     }
 
     /**
