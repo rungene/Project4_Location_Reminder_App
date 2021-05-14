@@ -5,9 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import com.google.android.gms.location.GeofencingClient
+import com.google.android.gms.location.LocationServices
 import com.udacity.project4.R
 import com.udacity.project4.databinding.ActivityReminderDescriptionBinding
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
+import org.koin.android.ext.android.inject
 
 /**
  * Activity that displays the reminder details after the user clicks on the notification
@@ -24,14 +28,35 @@ class ReminderDescriptionActivity : AppCompatActivity() {
             return intent
         }
     }
-
     private lateinit var binding: ActivityReminderDescriptionBinding
+    private lateinit var geofencingClient: GeofencingClient
+
+    val _viewModel: ReminderDescriptionViewModel by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(
             this,
             R.layout.activity_reminder_description
         )
-//        TODO: Add the implementation of the reminder details
+//      Add the implementation of the reminder details
+        binding.viewModel = _viewModel
+
+        geofencingClient = LocationServices.getGeofencingClient(this)
+
+        val reminderItem = intent.extras?.getSerializable(EXTRA_ReminderDataItem) as ReminderDataItem
+        binding.reminderDataItem = reminderItem
+
+        _viewModel.reminderHasBeenDeleted.observe(this, Observer { reminderHasBeenDeleted ->
+            if (reminderHasBeenDeleted) {
+                geofencingClient.removeGeofences(mutableListOf(reminderItem.id)).addOnSuccessListener {
+                    val intent = Intent(this, RemindersActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+                    finish()
+                    _viewModel.reminderHasBeenDeleted.value = false
+                }
+            }
+        })
     }
 }

@@ -3,6 +3,7 @@ package com.udacity.project4.locationreminders.data.local
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
+import com.udacity.project4.utils.wrapEspressoIdlingResource
 import kotlinx.coroutines.*
 
 /**
@@ -56,6 +57,18 @@ class RemindersLocalRepository(
             return@withContext Result.Error(e.localizedMessage)
         }
     }
+    /**
+     * Deletes a single reminder
+     * @param reminder the reminder to be deleted
+     */
+    override suspend fun deleteReminder(reminder: ReminderDTO) {
+        wrapEspressoIdlingResource {
+            withContext(ioDispatcher) {
+                remindersDao.deleteReminder(reminder)
+            }
+        }
+    }
+
 
     /**
      * Deletes all the reminders in the db

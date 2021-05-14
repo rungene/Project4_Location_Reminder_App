@@ -34,6 +34,8 @@
     <string name="err_enter_title">Please enter title</string>
     <string name="err_select_location">Please select location</string>
     <string name="custom_location">Custom Location</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_reminder">Delete Reminder</string>
 
     <!-- Error strings -->
     <string name="geofence_unknown_error">Unknown error: the Geofence service is not available now.</string>
@@ -41,6 +43,16 @@
     <string name="geofence_too_many_geofences">Your app has registered too many geofences.</string>
     <string name="geofence_too_many_pending_intents">You have provided too many PendingIntents to the addGeofences() call.</string>
     <string name="error_adding_geofence">Error Happened, Can\'t Add Geofence</string>
+    <string name="permission_rationale_snackbar_text">Enable background location access.</string>
+    <string name="permission_rationale_snackbar_button_text">Enable</string>
+    <string name="background_permissions_denied">Cannot access background location.</string>
+    <string name="change_permissions">Change Permissions</string>
+    <string name="enable_google_location_services">Cannot save reminder. Make sure Google Location Services are enabled.</string>
+    <string name="too_many_geofences">You have too many active reminders. Delete some to add more.</string>
+    <string name="unknown_error">An unknown error occurred.</string>
+    <string name="background_location_required_dialogue_title">Background Location Required</string>
+    <string name="background_location_required_dialogue_body">Reminders will not be triggered unless this application can access your location whilst it is not running.\n\nClick the button below to accept the relevant permissions.</string>
+    <string name="location_required_enablelocation">Enable Location</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="welcome_message_authed">Hi %1$s! Did you know that %2$s.</string>

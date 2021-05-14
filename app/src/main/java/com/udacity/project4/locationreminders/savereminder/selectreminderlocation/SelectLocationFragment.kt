@@ -65,14 +65,14 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback,GoogleMap.OnMap
         val mapFragment = childFragmentManager.findFragmentById(R.id.myMap) as SupportMapFragment
         mapFragment.getMapAsync(this)
 
-//        TODO: add the map setup implementation
+//        add the map setup implementation
 
-//        TODO: zoom to the user location after taking his permission
-//        TODO: add style to the map
-//        TODO: put a marker to location that the user selected
+//         zoom to the user location after taking his permission
+//         add style to the map
+//         put a marker to location that the user selected
 
 
-//        TODO: call this function after the user confirms on the selected location
+//        call this function after the user confirms on the selected location
 
 
         return binding.root
@@ -93,7 +93,7 @@ class SelectLocationFragment : BaseFragment(),OnMapReadyCallback,GoogleMap.OnMap
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        // TODO: Change the map type based on the user's selection.
+        //  Change the map type based on the user's selection.
         R.id.normal_map -> {
             myMap.mapType = GoogleMap.MAP_TYPE_NORMAL
             true
