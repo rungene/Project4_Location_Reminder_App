@@ -10,10 +10,11 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.0'
+        classpath 'com.android.tools.build:gradle:4.2.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
         classpath 'com.google.gms:google-services:4.3.5'
@@ -27,6 +28,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 }
 
@@ -57,8 +59,8 @@ ext {
     roomVersion = '2.3.0'
     koinVersion = '2.0.1'
     truthVersion = '0.44'
-    junitVersion = '4.12'
-    androidXTestCoreVersion = '1.4.0-alpha05'
+    junitVersion = '4.13.2'
+    androidXTestCoreVersion = '1.4.0-alpha06'
     robolectricVersion = '4.3.1'
     androidXTestExtKotlinRunnerVersion = '1.1.2'
     archTestingVersion = '2.1.0'
