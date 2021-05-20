@@ -1,6 +1,6 @@
 package com.udacity.project4.locationreminders.data.local
 
-import com.udacity.project4.locationreminders.data.FakeDataSource
+
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.dto.Result
@@ -15,7 +15,7 @@ class FakeRemindersRepository : ReminderDataSource {
 
     override suspend fun getReminders(): Result<List<ReminderDTO>> {
 
-        if (hasErrors) return Result.Error(FakeDataSource.ERROR_MESSAGE)
+        if (hasErrors) return Result.Error(ERROR_MESSAGE)
         return Result.Success<List<ReminderDTO>>(reminderDTO)
     }
 
