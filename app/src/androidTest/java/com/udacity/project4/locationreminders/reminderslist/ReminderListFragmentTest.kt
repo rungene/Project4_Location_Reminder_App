@@ -14,12 +14,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.google.firebase.auth.FirebaseUser
 import com.udacity.project4.R
+import com.udacity.project4.authentication.LoginViewModel
+import com.udacity.project4.base.BaseViewModel
 import com.udacity.project4.locationreminders.data.ReminderDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.data.local.FakeRemindersRepository
 import com.udacity.project4.util.FakeFirebaseUserLiveData
+import com.udacity.project4.util.getOrAwaitValue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runBlockingTest
+import org.hamcrest.Matchers.`is`
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
@@ -75,11 +79,10 @@ class ReminderListFragmentTest : KoinTest{
 
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
-        //scenario.onFragment {
-        //val res = it._viewModel.authenticationState.getOrAwaitValue()
-        //assertThat(res, `is`(BaseViewModel.AuthenticationState.AUTHENTICATED))
-        //}
-
+        scenario.onFragment {
+        val res = it.viewModel.authenticationState.getOrAwaitValue()
+        assertThat(res, `is`(LoginViewModel.AuthenticationState.AUTHENTICATED))
+        }
         onView(withId(R.id.reminderssRecyclerView)).check(RecyclerViewItemCountAssert(2))
         onView(withId(R.id.noDataTextView)).check(matches(not(isDisplayed())))
         onView(withId(R.id.progressBar)).check(matches(not(isDisplayed())))
@@ -90,10 +93,7 @@ class ReminderListFragmentTest : KoinTest{
 
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
-        //scenario.onFragment {
-        //val res = it._viewModel.authenticationState.getOrAwaitValue()
-        //assertThat(res, `is`(BaseViewModel.AuthenticationState.AUTHENTICATED))
-        //}
+
 
         onView(withId(R.id.reminderssRecyclerView)).check(RecyclerViewItemCountAssert(0))
         onView(withId(R.id.noDataTextView)).check(matches(isDisplayed()))
@@ -106,10 +106,7 @@ class ReminderListFragmentTest : KoinTest{
 
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
-        //scenario.onFragment {
-        //val res = it._viewModel.authenticationState.getOrAwaitValue()
-        //assertThat(res, `is`(BaseViewModel.AuthenticationState.AUTHENTICATED))
-        //}
+
 
         val navController = mock(NavController::class.java)
         scenario.onFragment {
@@ -127,10 +124,7 @@ class ReminderListFragmentTest : KoinTest{
 
         val scenario = launchFragmentInContainer<ReminderListFragment>(Bundle(), R.style.AppTheme)
 
-        //scenario.onFragment {
-        //val res = it._viewModel.authenticationState.getOrAwaitValue()
-        //assertThat(res, `is`(BaseViewModel.AuthenticationState.AUTHENTICATED))
-        //}
+
 
         onView(withId(com.google.android.material.R.id.snackbar_text))
             .check(matches(withText(FakeRemindersRepository.ERROR_MESSAGE)))
