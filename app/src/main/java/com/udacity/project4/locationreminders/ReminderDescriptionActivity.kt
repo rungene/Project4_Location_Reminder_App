@@ -43,6 +43,7 @@ class ReminderDescriptionActivity : AppCompatActivity() {
         binding.viewModel = _viewModel
 
         geofencingClient = LocationServices.getGeofencingClient(this)
+        
 
         val reminderItem = intent.extras?.getSerializable(EXTRA_ReminderDataItem) as ReminderDataItem
         binding.reminderDataItem = reminderItem
