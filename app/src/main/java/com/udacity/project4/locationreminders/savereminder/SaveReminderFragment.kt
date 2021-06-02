@@ -6,7 +6,6 @@ import android.annotation.TargetApi
 import android.app.PendingIntent
 import android.content.DialogInterface
 import android.content.Intent
-import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -19,7 +18,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
 import com.udacity.project4.BuildConfig.APPLICATION_ID
@@ -29,7 +27,6 @@ import com.udacity.project4.base.NavigationCommand
 import com.udacity.project4.databinding.FragmentSaveReminderBinding
 import com.udacity.project4.locationreminders.geofence.GeofenceBroadcastReceiver
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
-import com.udacity.project4.locationreminders.savereminder.selectreminderlocation.SelectLocationFragment
 import com.udacity.project4.utils.setDisplayHomeAsUpEnabled
 import org.koin.android.ext.android.inject
 import java.util.concurrent.TimeUnit
@@ -278,14 +275,14 @@ class SaveReminderFragment : BaseFragment() {
             }
         }else {
             if (!isPermissionsBackgroundLocationEnabled()) {
-                val builder = AlertDialog.Builder(requireActivity())
-                builder
+                val alertDialogeBuilder = AlertDialog.Builder(requireActivity())
+                alertDialogeBuilder
                     .setTitle(getString(R.string.title_background_location_required_dialogue))
                     .setMessage(R.string.body_background_location_required_dialogue)
                     .setPositiveButton(R.string.enablelocation_location_required) { dialog: DialogInterface?, which: Int ->
                       backgroundPermissionsRequest()
                     }
-                    .setNegativeButton(R.string.cancel) { dialog: DialogInterface?, which: Int ->
+                    .setNegativeButton(R.string.cancel) { dialog: DialogInterface?, _: Int ->
                         dialog?.let {
                             dialog.dismiss()
                         }
