@@ -22,7 +22,7 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     val latitude = MutableLiveData<Double>()
     val longitude = MutableLiveData<Double>()
 
-    val locationIsConfirmed = MutableLiveData<Boolean>(false)
+    val confirmedLocation = MutableLiveData<Boolean>(false)
 
     /**
      * Clear the live data objects to start fresh next time the view model gets called
@@ -36,8 +36,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
         longitude.value = null
     }
 
-    fun confirmLocation(latLng: LatLng, pointOfInterest: PointOfInterest) {
-        locationIsConfirmed.value = false
+    fun locationConfirmation(latLng: LatLng, pointOfInterest: PointOfInterest) {
+        confirmedLocation.value = false
         reminderSelectedLocationStr.value = pointOfInterest.name
         selectedPOI.value = pointOfInterest
         latitude.value = latLng.latitude
@@ -50,8 +50,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Set location as confirmed in order to navigate back to the reminder form.
      */
-    fun setLocationAsConfirmed(value: Boolean) {
-        locationIsConfirmed.value = value
+    fun setConfirmedLocation(value: Boolean) {
+        confirmedLocation.value = value
     }
 
     /**
@@ -66,7 +66,8 @@ class SaveReminderViewModel(val app: Application, val dataSource: ReminderDataSo
     /**
      * Save the reminder to the data source
      */
-    fun saveReminder(reminderData: ReminderDataItem) {
+
+    private fun saveReminder(reminderData: ReminderDataItem) {
         showLoading.value = true
         viewModelScope.launch {
             dataSource.saveReminder(

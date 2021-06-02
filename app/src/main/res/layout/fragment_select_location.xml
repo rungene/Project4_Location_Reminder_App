@@ -15,22 +15,24 @@
         android:layout_height="match_parent">
 
         <fragment
-            android:id="@+id/myMap"
+            android:id="@+id/googleMap"
             android:name="com.google.android.gms.maps.SupportMapFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/saveLocationButton"
+            app:layout_constraintBottom_toTopOf="@+id/locationSaveButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:context=".MapsActivity" />
+            tools:context=".MapsActivity"
+            />
 
         <Button
-            android:id="@+id/saveLocationButton"
-            style="@style/Widget.AppCompat.Button.Colored"
+            android:id="@+id/locationSaveButton"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:onClick="@{() -> viewModel.setLocationAsConfirmed(true)}"
+            android:onClick="@{() -> viewModel.setConfirmedLocation(true)}"
             android:text="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.udacity.project4.locationreminders.ReminderDescriptionViewModel" />
+            type="com.udacity.project4.locationreminders.DescriptionReminderViewModel" />
         <!--Data item that holds the reminder details-->
         <variable
             name="reminderDataItem"
@@ -26,37 +26,40 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_normal"
             android:gravity="center"
-            android:text="Reminder Details"
-            android:textSize="@dimen/text_size_large"/>
+            android:text="@string/reminder_details"
+            android:textSize="@dimen/text_size_large"
+            android:layout_margin="@dimen/margin_normal"
+            />
 
         <TextView
-            android:id="@+id/reminderTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_gravity="center"
             android:text="@{reminderDataItem.title}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="@dimen/margin_normal"
+            android:id="@+id/reminderTitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textAlignment="center"
-            tools:text="Talk to Colleagues" />
+            tools:text="@string/reminders_text_details" />
 
         <TextView
-            android:id="@+id/reminderDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_normal"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/margin_normal"
             android:text="@{reminderDataItem.description}"
-            android:layout_gravity="center_horizontal"
             android:textAlignment="center"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="Have a chat with colleagues at work."/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            tools:text="@string/reminder_description_text"
+            android:id="@+id/reminderDescription"
+            />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.AppCompat.Button.Colored"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
             android:text="@string/delete_reminder"
-            android:onClick="@{() -> viewModel.deleteReminder(reminderDataItem)}"/>
+            android:onClick="@{() -> viewModel.deleteAReminder(reminderDataItem)}"/>
 
     </LinearLayout>
 </layout>

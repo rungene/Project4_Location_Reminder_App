@@ -14,12 +14,12 @@ import org.junit.runner.Description
 // As a result, the standard Dispatchers.Main cannot be used in local tests
 // Whenever this rule is applied, co-routines run on Dispatchers.Main will actually use TestCoroutineDispatcher
 @ExperimentalCoroutinesApi
-class MainCoroutineRule(val dispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()):
+class MainCoroutineRule(val testCoroutineDispatcher: TestCoroutineDispatcher = TestCoroutineDispatcher()):
     TestWatcher(),
-    TestCoroutineScope by TestCoroutineScope(dispatcher) {
+    TestCoroutineScope by TestCoroutineScope(testCoroutineDispatcher) {
     override fun starting(description: Description?) {
         super.starting(description)
-        Dispatchers.setMain(dispatcher)
+        Dispatchers.setMain(testCoroutineDispatcher)
     }
 
     override fun finished(description: Description?) {

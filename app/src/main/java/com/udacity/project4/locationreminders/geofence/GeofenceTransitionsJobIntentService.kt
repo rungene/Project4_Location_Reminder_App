@@ -38,11 +38,11 @@ class GeofenceTransitionsJobIntentService : JobIntentService(), CoroutineScope {
         // send a notification to the user when he enters the geofence area
         // call @sendNotification
 
-        val event = GeofencingEvent.fromIntent(intent)
+        val eventGeofence = GeofencingEvent.fromIntent(intent)
 
-        if (event.triggeringGeofences.isEmpty()) return
-        if (event.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
-            sendNotification(event.triggeringGeofences)
+        if (eventGeofence.triggeringGeofences.isEmpty()) return
+        if (eventGeofence.geofenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER) {
+            sendNotification(eventGeofence.triggeringGeofences)
         }
 
 

@@ -24,7 +24,7 @@ class ReminderListFragment : BaseFragment() {
     //use Koin to retrieve the ViewModel instance
 
     override val _viewModel: RemindersListViewModel by viewModel()
-val viewModel by viewModels<LoginViewModel>()
+private val viewModel by viewModels<LoginViewModel>()
     private lateinit var binding: FragmentRemindersBinding
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -93,7 +93,7 @@ val viewModel by viewModels<LoginViewModel>()
         when (item.itemId) {
             R.id.logout -> {
 //                Done: add the logout implementation
-                Toast.makeText(context,"Hi from Logout",Toast.LENGTH_LONG).show()
+
               AuthUI.getInstance().signOut(requireContext()).addOnSuccessListener {
                   // Transfer the user to the AuthenticationActivity
                   val logOutIntent = Intent(activity, AuthenticationActivity::class.java)

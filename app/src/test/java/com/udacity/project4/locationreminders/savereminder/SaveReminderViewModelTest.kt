@@ -2,20 +2,13 @@ package com.udacity.project4.locationreminders.savereminder
 
 import android.os.Build
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.LiveData
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PointOfInterest
-import com.google.firebase.auth.FirebaseUser
-import com.udacity.project4.MyApp
 import com.udacity.project4.base.NavigationCommand
-import com.udacity.project4.locationreminders.FakeFirebaseUserLiveData
 import com.udacity.project4.locationreminders.MainCoroutineRule
 import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.ReminderDataSource
-import com.udacity.project4.locationreminders.data.dto.Result
-import com.udacity.project4.locationreminders.getOrAwaitValue
+import com.udacity.project4.locationreminders.getOrAwaitValueForTest
 import com.udacity.project4.locationreminders.reminderslist.ReminderDataItem
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,10 +23,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.core.context.loadKoinModules
 import org.koin.core.context.stopKoin
-import org.koin.core.context.unloadKoinModules
-import org.koin.dsl.module
 import org.robolectric.annotation.Config
 @ExperimentalCoroutinesApi
 @Config(maxSdk = Build.VERSION_CODES.P)
@@ -56,134 +46,101 @@ class SaveReminderViewModelTest {
     // Subject under test
     private lateinit var saveReminderViewModel: SaveReminderViewModel
 
-    val modulesToLoad = module {
-        single(override = true) { FakeFirebaseUserLiveData() as LiveData<FirebaseUser?>  }
-    }
+
+
 
     @Before
-    fun setUpViewModel() = runBlockingTest {
-        remindersRepository = FakeDataSource()
+    fun setUp()= runBlockingTest {
+        remindersRepository=FakeDataSource()
 
-        val app: MyApp = ApplicationProvider.getApplicationContext()
-        loadKoinModules(modulesToLoad)
 
-        saveReminderViewModel = SaveReminderViewModel(app, remindersRepository)
+        saveReminderViewModel =
+            SaveReminderViewModel(ApplicationProvider.getApplicationContext(), remindersRepository)
     }
 
     @After
-    fun tearDownViewModel() = runBlockingTest {
-        unloadKoinModules(modulesToLoad)
+    fun tearDown()= runBlockingTest {
+
         stopKoin()
     }
 
-    @Test
-    fun confirmLocationAndNavigateBack() = runBlockingTest {
-        val latLng = LatLng(120.00, 120.00)
-        val pointOfInterest = PointOfInterest(latLng, "Place One", "A Special Place")
-
-        saveReminderViewModel.confirmLocation(latLng, pointOfInterest)
-
-        assertThat(saveReminderViewModel.latitude.getOrAwaitValue(), `is`(latLng.latitude))
-        assertThat(saveReminderViewModel.longitude.getOrAwaitValue(), `is`(latLng.longitude))
-        assertThat(saveReminderViewModel.selectedPOI.getOrAwaitValue(), `is`(pointOfInterest))
-        assertThat(saveReminderViewModel.reminderSelectedLocationStr.getOrAwaitValue(), `is`(pointOfInterest.name))
-        assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue(), IsInstanceOf(NavigationCommand.Back::class.java))
-
-        saveReminderViewModel.onClear()
-    }
 
     @Test
-    fun validateCorrectAndIncorrectReminder() = runBlockingTest {
-        val badReminder = ReminderDataItem(
-            title = "Bad Reminder",
+    fun saveReminder_validateValidAndInvalid_returnsValidAndInvalidReminders() = runBlockingTest {
+//valid data entered
+        val validReminder = ReminderDataItem(
+            title = "Valid Reminder",
             description = null,
             longitude = null,
             latitude = null,
-            location = null)
-        val badReminderTwo = ReminderDataItem (
+            location = "Valid Reminder Location"
+        )
+
+
+// invalid data -location missing
+        val invalidReminder = ReminderDataItem(
+            title = "Valid Title",
+            description = null,
+            longitude = null,
+            latitude = null,
+            location = null
+        )
+        // invalid data -Title missing
+        val invalidReminder2nd = ReminderDataItem(
             title = null,
             description = null,
             longitude = null,
             latitude = null,
-            location = "A Location"
-        )
-        val goodReminder = ReminderDataItem(
-            title = "Good Reminder",
-            description = null,
-            longitude = null,
-            latitude = null,
-            location = "Good Reminder Location"
+            location = "Valid Location"
         )
 
-        val badReminderResult = saveReminderViewModel.validateEnteredData(badReminder)
-        assertThat(badReminderResult, `is`(false))
-        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(), notNullValue())
+        val inValidReminderResult = saveReminderViewModel.validateEnteredData(invalidReminder)
+        assertThat(inValidReminderResult, `is`(false))
+        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValueForTest(), notNullValue())
         saveReminderViewModel.showSnackBarInt.value = null
 
-        val goodReminderResult = saveReminderViewModel.validateEnteredData(goodReminder)
-        assertThat(goodReminderResult, `is`(true))
-        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(), IsNull())
+     val validReminderResult =  saveReminderViewModel.validateEnteredData(validReminder)
+        assertThat(validReminderResult, `is`(true))
+        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValueForTest(), IsNull())
         saveReminderViewModel.showSnackBarInt.value = null
 
-        val badReminderTwoResult = saveReminderViewModel.validateEnteredData(badReminderTwo)
-        assertThat(badReminderTwoResult, `is`(false))
-        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValue(), notNullValue())
+
+
+        val invalidReminder2ndResult = saveReminderViewModel.validateEnteredData(invalidReminder2nd)
+        assertThat(invalidReminder2ndResult, `is`(false))
+        assertThat(saveReminderViewModel.showSnackBarInt.getOrAwaitValueForTest(), notNullValue())
         saveReminderViewModel.showSnackBarInt.value = null
+
+
+
     }
+
 
     @Test
-    fun validateAndSaveReminders() = runBlockingTest {
-        val badReminder = ReminderDataItem(
-            title = "Bad Reminder",
-            description = null,
-            longitude = null,
-            latitude = null,
-            location = null)
-        val badReminderTwo = ReminderDataItem (
-            title = null,
-            description = null,
-            longitude = null,
-            latitude = null,
-            location = "A Location"
-        )
-        val goodReminder = ReminderDataItem(
-            title = "Good Reminder",
-            description = null,
-            longitude = null,
-            latitude = null,
-            location = "Good Reminder Location"
+    fun saveReminder_saveValidReminder_returnsTrue() = runBlockingTest {
+
+        val reminderDataItem = ReminderDataItem(
+            "Location",
+            "Description",
+            "location",
+            11.647596,
+            55.645856,
+            "123456"
         )
 
-        saveReminderViewModel.validateAndSaveReminder(goodReminder)
 
-        saveReminderViewModel.validateAndSaveReminder(badReminder)
-        val badReminderResult = remindersRepository.getReminder(badReminder.id)
-        assertThat(badReminderResult, IsInstanceOf(Result.Error::class.java))
-
-        saveReminderViewModel.validateAndSaveReminder(badReminderTwo)
-        val badReminderTwoResult = remindersRepository.getReminder(badReminderTwo.id)
-        assertThat(badReminderTwoResult, IsInstanceOf(Result.Error::class.java))
-
-        saveReminderViewModel.validateAndSaveReminder(badReminderTwo)
-        val goodReminderResult = remindersRepository.getReminder(goodReminder.id)
-        assertThat(goodReminderResult, IsInstanceOf(Result.Success::class.java))
-        assertThat(saveReminderViewModel.showToast.getOrAwaitValue(), notNullValue())
-        assertThat(saveReminderViewModel.showLoading.getOrAwaitValue(), `is`(false))
-        assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValue(), IsInstanceOf(NavigationCommand.Back::class.java))
+        mainCoroutineRule.testCoroutineDispatcher.pauseDispatcher()
+        saveReminderViewModel.validateAndSaveReminder(reminderDataItem)
 
 
-        if (goodReminderResult is Result.Success) {
-            val data = goodReminderResult.data
-            assertThat(data.id, `is`(goodReminder.id))
-            assertThat(data.description, `is`(goodReminder.description))
-            assertThat(data.location, `is`(goodReminder.location))
-            assertThat(data.longitude, `is`(goodReminder.longitude))
-            assertThat(data.latitude, `is`(goodReminder.latitude))
-        }
+        assertThat(saveReminderViewModel.showLoading.getOrAwaitValueForTest(),`is`(true))
+        mainCoroutineRule.testCoroutineDispatcher.resumeDispatcher()
+        assertThat(saveReminderViewModel.showLoading.getOrAwaitValueForTest(),`is`(false))
 
-        saveReminderViewModel.onClear()
+        assertThat(saveReminderViewModel.navigationCommand.getOrAwaitValueForTest(),IsInstanceOf(NavigationCommand.Back::class.java))
+
+    saveReminderViewModel.onClear()
     }
-
 
 
 }

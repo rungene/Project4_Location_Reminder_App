@@ -31,7 +31,7 @@ class ReminderDescriptionActivity : AppCompatActivity() {
     private lateinit var binding: ActivityReminderDescriptionBinding
     private lateinit var geofencingClient: GeofencingClient
 
-    val _viewModel: ReminderDescriptionViewModel by inject()
+    private val reminderDescriptionViewModel: DescriptionReminderViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,22 +40,22 @@ class ReminderDescriptionActivity : AppCompatActivity() {
             R.layout.activity_reminder_description
         )
 //      Add the implementation of the reminder details
-        binding.viewModel = _viewModel
+        binding.viewModel = reminderDescriptionViewModel
 
         geofencingClient = LocationServices.getGeofencingClient(this)
         
 
-        val reminderItem = intent.extras?.getSerializable(EXTRA_ReminderDataItem) as ReminderDataItem
-        binding.reminderDataItem = reminderItem
+        val itemReminder = intent.extras?.getSerializable(EXTRA_ReminderDataItem) as ReminderDataItem
+        binding.reminderDataItem = itemReminder
 
-        _viewModel.reminderHasBeenDeleted.observe(this, Observer { reminderHasBeenDeleted ->
+        reminderDescriptionViewModel.deletedReminder.observe(this, Observer { reminderHasBeenDeleted ->
             if (reminderHasBeenDeleted) {
-                geofencingClient.removeGeofences(mutableListOf(reminderItem.id)).addOnSuccessListener {
+                geofencingClient.removeGeofences(mutableListOf(itemReminder.id)).addOnSuccessListener {
                     val intent = Intent(this, RemindersActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)
                     finish()
-                    _viewModel.reminderHasBeenDeleted.value = false
+                    reminderDescriptionViewModel.deletedReminder.value = false
                 }
             }
         })

@@ -22,7 +22,6 @@ import com.udacity.project4.util.ToastMatcher
 import com.udacity.project4.util.monitorActivity
 import com.udacity.project4.utils.EspressoIdlingResource
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -106,27 +105,36 @@ class RemindersActivityTest :
             repository.deleteAllReminders()
         }
     }
+
     @Test
-    fun checkSaveReminder() = runBlockingTest {
-        // Start up Tasks screen.
+    fun remindersFragment_clickFab_saveReminderFragment() = runBlocking {
+        // Start up RemindersActivity screen.
+
+        //there is an ActivityScenarioRule which calls launch and close for you.
+        /*     any setup of the data state, such as adding reminders to the repository, must happen before
+             ActivityScenario.launch() is called. Calling such additional setup code, such as saving
+             reminders to the repository, is not currently supported by ActivityScenarioRule. Therefore,
+             we choose not to use ActivityScenarioRule and instead manually call launch and close.*/
         val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
 
         dataBindingIdlingResource.monitorActivity(activityScenario)
 
         // Espresso code will go here.
+        // Click on the task on the FAB and verify that all the data is correct.
         onView(withId(R.id.addReminderFAB)).perform(click())
-        onView(withId(R.id.reminderTitle)).perform(replaceText("A new title"))
-        onView(withId(R.id.reminderDescription)).perform(replaceText("A new description"))
+        onView(withId(R.id.reminderTitle)).perform(replaceText("Add title"))
+        onView(withId(R.id.reminderDescription)).perform(replaceText("Add description"))
         onView(withId(R.id.selectLocation)).perform(click())
 
-        onView(withId(R.id.saveLocationButton)).perform(click())
-
+        // Click on the saveLocationButton button and save reminder.
+        onView(withId(R.id.locationSaveButton)).perform(click())
         onView(withId(R.id.saveReminder)).perform(click())
 
-        //Check if toast is displayed
-        onView(withText(R.string.reminder_saved)).inRoot(ToastMatcher()).check(matches(isDisplayed()))
+        //confirm toast is displayed
+      onView(withText(R.string.geofences_added)).inRoot(ToastMatcher()).check(matches(isDisplayed()))
+        // Verify a reminder is displayed on screen in the reminder list fragment.
+        onView(withText("Add title")).check(matches(isDisplayed()))
 
-        onView(withText("A new title")).check(matches(isDisplayed()))
 
         // Make sure the activity is closed before resetting the db:
         activityScenario.close()
