@@ -153,63 +153,6 @@ class SaveReminderFragment : BaseFragment() {
             true
         }
     }
-/*    private fun checkPermissionsAndStartGeofencing() {
-
-        if (isPermissionsBackgroundLocationEnabled()) {
-            checkDeviceLocationSettingsAndStartGeofence()
-        } else {
-           backgroundPermissionsRequest()
-        }
-    }
-    *//*
- *  Uses the Location Client to check the current state of location settings, and gives the user
- *  the opportunity to turn on location services within our app.
- *//*
-    private fun checkDeviceLocationSettingsAndStartGeofence(resolve:Boolean = true) {
-        //  Step 6 add code to check that the device's location is on
-        // create a LocationRequest, a LocationSettingsRequest Builder.
-        val locationRequest = LocationRequest.create().apply {
-            priority = LocationRequest.PRIORITY_LOW_POWER
-        }
-        val builder = LocationSettingsRequest.Builder().addLocationRequest(locationRequest)
-
-//use LocationServices to get the Settings Client and create a val called
-// locationSettingsResponseTask to check the location settings.
-        val settingsClient = LocationServices.getSettingsClient(requireContext())
-        val locationSettingsResponseTask =
-            settingsClient.checkLocationSettings(builder.build())
-
-//Since the case we are most interested in here is finding out if the location settings are not
-// satisfied, add an onFailureListener() to the locationSettingsResponseTask.
-        locationSettingsResponseTask.addOnFailureListener { exception ->
-            if (exception is ResolvableApiException && resolve){
-                try {
-                    exception.startResolutionForResult(requireActivity(),
-                        REQUEST_TURN_DEVICE_LOCATION_ON)
-                } catch (sendEx: IntentSender.SendIntentException) {
-                    Log.d(TAG, "Error getting location settings resolution: " + sendEx.message)
-                }
-            } else {
-                Snackbar.make(
-                    requireView(),
-                    R.string.location_required_error, Snackbar.LENGTH_INDEFINITE
-                ).setAction(android.R.string.ok) {
-                    checkDeviceLocationSettingsAndStartGeofence()
-                }.show()
-            }
-        }
-
-
-        locationSettingsResponseTask.addOnCompleteListener {
-            if ( it.isSuccessful ) {
-                addGeofenceAndSaveReminder()
-            }
-        }
-
-    }*/
-
-
-
 
 
 
@@ -275,8 +218,8 @@ class SaveReminderFragment : BaseFragment() {
             }
         }else {
             if (!isPermissionsBackgroundLocationEnabled()) {
-                val alertDialogeBuilder = AlertDialog.Builder(requireActivity())
-                alertDialogeBuilder
+                val alertDialogBuilder = AlertDialog.Builder(requireActivity())
+                alertDialogBuilder
                     .setTitle(getString(R.string.title_background_location_required_dialogue))
                     .setMessage(R.string.body_background_location_required_dialogue)
                     .setPositiveButton(R.string.enablelocation_location_required) { dialog: DialogInterface?, which: Int ->
