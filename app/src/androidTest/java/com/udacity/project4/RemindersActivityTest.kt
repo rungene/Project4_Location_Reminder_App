@@ -107,6 +107,38 @@ class RemindersActivityTest :
     }
 
     @Test
+    fun remindersFragment_clickFab_locationNotSelected_showSnackBar() = runBlocking {
+        // Start up RemindersActivity screen.
+
+        //there is an ActivityScenarioRule which calls launch and close for you.
+        /*     any setup of the data state, such as adding reminders to the repository, must happen before
+             ActivityScenario.launch() is called. Calling such additional setup code, such as saving
+             reminders to the repository, is not currently supported by ActivityScenarioRule. Therefore,
+             we choose not to use ActivityScenarioRule and instead manually call launch and close.*/
+        val activityScenario = ActivityScenario.launch(RemindersActivity::class.java)
+
+        dataBindingIdlingResource.monitorActivity(activityScenario)
+
+        // Espresso code will go here.
+        // Click on the task on the FAB and verify that all the data is correct.
+        onView(withId(R.id.addReminderFAB)).perform(click())
+        onView(withId(R.id.reminderTitle)).perform(replaceText("Add title1"))
+        onView(withId(R.id.reminderDescription)).perform(replaceText("Add description1"))
+
+
+        onView(withId(R.id.saveReminder)).perform(click())
+
+        val snackBarErrorMessage = appContext.getString(R.string.select_location)
+
+        onView(withText(snackBarErrorMessage))
+            .check(matches((isDisplayed())))
+
+
+        // Make sure the activity is closed before resetting the db:
+        activityScenario.close()
+    }
+
+    @Test
     fun remindersFragment_clickFab_saveReminderFragment() = runBlocking {
         // Start up RemindersActivity screen.
 
@@ -124,6 +156,7 @@ class RemindersActivityTest :
         onView(withId(R.id.addReminderFAB)).perform(click())
         onView(withId(R.id.reminderTitle)).perform(replaceText("Add title"))
         onView(withId(R.id.reminderDescription)).perform(replaceText("Add description"))
+
         onView(withId(R.id.selectLocation)).perform(click())
 
         // Click on the saveLocationButton button and save reminder.
@@ -135,10 +168,15 @@ class RemindersActivityTest :
         // Verify a reminder is displayed on screen in the reminder list fragment.
         onView(withText("Add title")).check(matches(isDisplayed()))
 
+    /*    onView(withId(com.google.android.material.R.id.snackbar_text))
+            .check(matches(withText(R.string.permission_denied_explanation)))*/
+
 
         // Make sure the activity is closed before resetting the db:
         activityScenario.close()
     }
+
+
 
 
 }
