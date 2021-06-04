@@ -9,6 +9,7 @@ import com.udacity.project4.locationreminders.data.FakeDataSource
 import com.udacity.project4.locationreminders.data.dto.ReminderDTO
 import com.udacity.project4.locationreminders.getOrAwaitValueForTest
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.runBlockingTest
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.MatcherAssert.assertThat
@@ -49,6 +50,24 @@ class RemindersListViewModelTest {
 
 
     }
+
+    @Test
+    fun loadRemindersWhenAreUnavailable_shouldReturnError() = runBlocking {
+        repositoryReminder.deleteAllReminders()
+        repositoryReminder.hasErrors =true
+        reminderListViewModel.loadReminders()
+
+        val snackbarMessage = reminderListViewModel.showSnackBar.getOrAwaitValueForTest ()
+        val showNoData = reminderListViewModel.showNoData.getOrAwaitValueForTest()
+
+        assertThat("Error Message Is Displayed",snackbarMessage, notNullValue())
+        assertThat("Not Data is shown",showNoData, notNullValue())
+
+        repositoryReminder.hasErrors = false
+
+    }
+
+
 
     private fun buildReminder(title: String, description: String, location: String): ReminderDTO {
         val reminder = ReminderDTO(
